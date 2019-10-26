@@ -58,7 +58,8 @@ def index_all(source="../dataset/dataset.txt"):
 	images, categories = [], []
 	with open(source) as f:
 		raw_file = f.readlines()
-		raw_file = set(raw_file)[14425:]
+		raw_file = set(raw_file)
+		raw_file = list(raw_file)[14425:]
 	for record in raw_file:
 		data = json.loads(record)
 		link = 'dataset/' + data['dir']

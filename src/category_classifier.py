@@ -112,3 +112,4 @@ if __name__ == '__main__':
 		input, output = get_batches_dataset(batch, labels)
 		model = train(input, output, model)
 		save_model(model, labels)
+		del input, output
