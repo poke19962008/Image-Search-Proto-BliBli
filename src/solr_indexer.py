@@ -57,8 +57,8 @@ def query_to_solr(vec, categories):
 def index_all(source="../dataset/dataset.txt"):
 	images, categories = [], []
 	with open(source) as f:
-		raw_file = f.readlines()[:configs['FILE_RANGE']]
-		raw_file = set(raw_file)
+		raw_file = f.readlines()
+		raw_file = set(raw_file)[14425:]
 	for record in raw_file:
 		data = json.loads(record)
 		link = 'dataset/' + data['dir']
@@ -70,8 +70,8 @@ def index_all(source="../dataset/dataset.txt"):
 			image_np = read_image("../" + image_).squeeze()
 			vec = get_embedding(image_np)
 			ind = images.index(image_)
-			t = Thread(target=update_to_solr, args=(vec, image_, cat, ind))
-			t.start()
+			update_to_solr(vec, image_, cat, ind)
+			del vec, image_np
 		except KeyboardInterrupt:
 			raise
 		except:
