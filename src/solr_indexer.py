@@ -3,8 +3,8 @@ from configs import configs
 from threading import Thread
 from util import get_embedding, read_image
 
-HOST = "seoulsolr6-01.dev1.lokal:8983"
-COLL = "imageSearch"
+HOST = configs['SOLR_HOST']
+COLL = configs['SOLR_COLL']
 # HOST = "xsearch-solr7-02.perf.lokal:8983"
 # COLL = "imageSearch_flatten"
 
