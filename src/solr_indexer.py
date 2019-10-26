@@ -54,9 +54,9 @@ def query_to_solr(vec, categories):
 	return [doc for doc in docs if doc['score'] > configs['SOLR_SCORE_THRESH']]
 
 
-def index_all(source="dataset/"):
+def index_all(source="../dataset/dataset.txt"):
 	images, categories = [], []
-	with open('../dataset/dataset.txt') as f:
+	with open(source) as f:
 		raw_file = f.readlines()[:configs['FILE_RANGE']]
 		raw_file = set(raw_file)
 	for record in raw_file:
@@ -67,7 +67,7 @@ def index_all(source="dataset/"):
 	print "Images=", len(images), "Categories=", len(categories)
 	for image_, cat in zip(images, categories):
 		try:
-			image_np = read_image("../"+image_).squeeze()
+			image_np = read_image("../" + image_).squeeze()
 			vec = get_embedding(image_np)
 			ind = images.index(image_)
 			t = Thread(target=update_to_solr, args=(vec, image_, cat, ind))
@@ -76,3 +76,7 @@ def index_all(source="dataset/"):
 			raise
 		except:
 			continue
+
+
+if __name__ == '__main__':
+	index_all()
