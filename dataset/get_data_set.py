@@ -47,7 +47,6 @@ def get_document(start, category):
 
 	response = requests.post('https://searchcenter.gdn-app.com/x-search/api/solr-query-data', headers=headers,
 							 params=params, cookies=cookies, data=data)
-	print response.text
 	return json.loads(response.json()['errorMessage'])['response']['docs']
 
 
