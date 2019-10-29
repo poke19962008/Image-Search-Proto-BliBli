@@ -4,7 +4,7 @@ ROWS = 1000
 PREFIX = 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/'
 
 
-def get_document(start):
+def get_document(start, category):
 	cookies = {
 		'JSESSIONID': 'F013510061BD3C24361AF552A45C969B',
 		'_ga': 'GA1.2.321933754.1539761137',
@@ -31,14 +31,14 @@ def get_document(start):
 
 	params = (
 		('collectionName', 'productCollectionAlias'),
-		('query', 'fl=mediumImage,salesCatalogCategoryIds&fq=salesCatalogCategoryIds:54912&indent=on&q=*:*&rows=' + str(
+		('query', 'fl=mediumImage,salesCatalogCategoryIds&fq=salesCatalogCategoryIds:'+category+'&indent=on&q=*:*&rows=' + str(
 			ROWS) + '&wt=json' + '&start=' + str(start)),
 		('requestHandler', 'select'),
 	)
 
 	data = {
 		'{"collectionName":"productCollectionAlias","requestHandler":"select","query":"fl': 'sku,name,mediumImage',
-		'fq': 'salesCatalogCategoryIds:54912',
+		'fq': 'salesCatalogCategoryIds:'+category+'',
 		'indent': 'on',
 		'q': '*:*',
 		'rows': '100',
@@ -53,12 +53,14 @@ def get_document(start):
 
 if __name__ == '__main__':
 	fileName = 'dataset.txt'
+	category = '54912'
 	if len(sys.argv) > 1:
-		fileName = sys.argv[1]
+		fileName = 'dataset_'+sys.argv[1]+'.txt'
+		category = sys.argv[1]
 	start = 0
 	while True:
 		try:
-			images = get_document(start)
+			images = get_document(start, category)
 			if len(images) == 0:
 				break
 			print 'Start=', start
