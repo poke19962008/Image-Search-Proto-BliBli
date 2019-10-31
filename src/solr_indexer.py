@@ -1,7 +1,7 @@
 import requests, json
 from configs import configs
 from threading import Thread
-from util import get_embedding, read_image
+from embedding import get_embedding, read_image
 
 HOST = configs['SOLR_HOST']
 COLL = configs['SOLR_COLL']

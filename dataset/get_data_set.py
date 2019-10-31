@@ -51,7 +51,7 @@ def get_document(start, category):
 
 
 if __name__ == '__main__':
-	fileName = 'dataset.txt'
+	fileName = 'dataset_54912.txt'
 	category = '54912'
 	if len(sys.argv) > 1:
 		fileName = 'dataset_'+sys.argv[1]+'.txt'

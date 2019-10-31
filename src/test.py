@@ -1,4 +1,4 @@
-from util import get_embedding, read_image
+from embedding import get_embedding, read_image
 from solr_indexer import update_to_solr, index_all
 from configs import configs
 

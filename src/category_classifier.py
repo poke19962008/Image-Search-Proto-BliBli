@@ -3,7 +3,7 @@ import numpy as np
 import cv2 as cv
 import json, random
 from configs import configs
-from util import partition
+from embedding import partition
 
 configs = configs['CAT_CLASS']
 
