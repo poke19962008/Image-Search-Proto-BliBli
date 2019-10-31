@@ -8,7 +8,7 @@ IMAGE_DIM = (380, 380, 3)
 
 def get_embedding(image_np):
 	payload = {
-		isinstance: [image_np.reshape((1, 380, 380, 3))]
+		'isinstance': [image_np.reshape((1, 380, 380, 3))]
 	}
 	data = requests.post('localhost:9000/v1/models/ImageClassifier:predict', json=payload)
 	return data.text
