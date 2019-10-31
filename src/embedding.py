@@ -2,16 +2,16 @@ import tensorflow as tf
 from configs import configs
 import cv2 as cv
 import requests
-
+import numpy as np
 IMAGE_DIM = (380, 380, 3)
 
 
 def get_embedding(image_np):
 	payload = {
-		'isinstance': [image_np.reshape((1, 380, 380, 3))]
+		'instances': image_np.reshape((1, 380, 380, 3)).tolist()
 	}
-	data = requests.post('localhost:9000/v1/models/ImageClassifier:predict', json=payload)
-	return data.text
+        data = requests.post('http://localhost:9000/v1/models/embedding:predict', json=payload)
+	return np.array(data.json()['predictions'][0])
 
 
 def partition(l, n):
