@@ -9,7 +9,7 @@ configs = {
 	'debug': True,
 	'CAT_CLASS': {
 		'batch': 2000,
-		'category_thresh': 10,
+		'category_thresh': 100,
 		'cat_lower_limit': 1,
 		'cat_upper_limit': 3,
 		'epochs': 10
