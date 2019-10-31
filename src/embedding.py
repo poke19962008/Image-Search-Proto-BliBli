@@ -1,17 +1,14 @@
 import tensorflow as tf
 from configs import configs
 import cv2 as cv
+import requests
 
 IMAGE_DIM = (380, 380, 3)
 
+
 def get_embedding(image_np):
-	tf.InteractiveSession()
-	model = tf.keras.applications.ResNet50(weights='imagenet', pooling=max, include_top=False)
-	global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
-	feature = model.predict(image_np.reshape((1, 380, 380, 3)))
-	feature = global_average_layer(feature)
-	feature = tf.squeeze(feature)
-	return feature.eval()
+	data = requests.post('localhost:9000/v1/models/ImageClassifier:predict', data=image_np.reshape((1, 380, 380, 3)))
+	return data.text
 
 
 def partition(l, n):
