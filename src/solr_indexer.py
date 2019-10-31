@@ -59,7 +59,7 @@ def index_all(source="../dataset/dataset.txt"):
 	with open(source) as f:
 		raw_file = f.readlines()
 		raw_file = set(raw_file)
-		raw_file = list(raw_file)[14425:]
+		raw_file = list(raw_file)
 	for record in raw_file:
 		data = json.loads(record)
 		link = 'dataset/' + data['dir']
@@ -71,7 +71,8 @@ def index_all(source="../dataset/dataset.txt"):
 			image_np = read_image("../" + image_).squeeze()
 			vec = get_embedding(image_np)
 			ind = images.index(image_)
-			update_to_solr(vec, image_, cat, ind)
+			t = Thread(target=update_to_solr, args=(vec, image_, cat, ind,))
+			t.start()
 			del vec, image_np
 		except KeyboardInterrupt:
 			raise
