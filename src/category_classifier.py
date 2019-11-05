@@ -7,8 +7,7 @@ from embedding import partition
 
 configs = configs['CAT_CLASS']
 
-IMAGE_DIM = (380, 380, 3)
-
+IMAGE_DIM = (None, None, 3)
 
 def get_output_vec(cat_list, labels):
 	cat_ind_list = []
@@ -45,8 +44,8 @@ def get_batches_dataset(raw_file, labels, source='../dataset/'):
 		try:
 			data = json.loads(record)
 			image = cv.imread(source + data['dir'])
-			if not image.shape == IMAGE_DIM:
-				continue
+			# if not image.shape == IMAGE_DIM:
+			# 	continue
 			label = get_output_vec(data['label'], labels)
 			output_vec = np.zeros(len(labels))
 			output_vec[label] = 1
