@@ -3,7 +3,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 import tensorflow as tf
 import numpy as np
 import cv2 as cv
-import json, random
+import json, random, shutil
 from configs import configs
 from embedding import partition
 
@@ -101,6 +101,7 @@ def train(input, output, model):
 
 
 def save_model(model, labels):
+	shutil.rmtree(configs['model_path'])
 	tf.keras.experimental.export_saved_model(model, configs['model_path'])
 	model.save('../models/catgegory_class.h5')
 	with open('../models/cat_label.json', 'w') as f:
