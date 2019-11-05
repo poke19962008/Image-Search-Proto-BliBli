@@ -9,6 +9,7 @@ configs = configs['CAT_CLASS']
 
 IMAGE_DIM = (None, None, 3)
 
+
 def get_output_vec(cat_list, labels):
 	cat_ind_list = []
 	cat_list = cat_list[configs['cat_lower_limit']:configs['cat_upper_limit']]
@@ -33,7 +34,7 @@ def load_dataset(source='../dataset/dataset.txt'):
 					label_map[label] += 1
 	labels = []
 	for label, value in label_map.items():
-		if value > configs['category_thresh']:
+		if value > configs['category_thresh_bucket']:
 			labels.append(label)
 	return partition(raw_file, configs['batch']), labels
 
@@ -92,15 +93,31 @@ def train(input, output, model):
 	train_label, val_label, test_label = np.split(output, [num_train, num_train + num_val])
 	epochs = configs['epochs']
 	model.fit(train_set, train_label,
-						epochs=epochs,
-						validation_data=(val_set, val_label))
+			  epochs=epochs,
+			  validation_data=(val_set, val_label))
 	return model
 
 
 def save_model(model, labels):
+	tf.keras.experimental.export_saved_model(model, configs['model_path'])
 	model.save('../models/catgegory_class.h5')
 	with open('../models/cat_label.json', 'w') as f:
 		json.dump(labels, f)
+
+
+with open('../models/cat_label_gpu.json', 'r') as f:
+	cat_label_map = json.load(f)
+
+
+def get_intent_categories(image):
+	tf.compat.v1.InteractiveSession()
+	category_classifier = tf.keras.models.load_model('../models/catgegory_class_gpu.h5')
+	scores, links = [], []
+	global cat_label_map
+	for index, score in enumerate(category_classifier.predict(np.array([image]))[0]):
+		scores.append([score * 100, index])
+	top_cats = sorted(scores, key=lambda x: x[0], reverse=True)[:configs['TOP_CATEGORIES_DETECTED']]
+	return [[cat_label_map[index[1]], index[0]] for index in top_cats if index[0] > configs['CATEGORY_THRESH']]
 
 
 if __name__ == '__main__':

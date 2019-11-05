@@ -3,7 +3,7 @@ import cv2 as cv
 from PIL import Image
 from matplotlib import pyplot as plt
 
-img_path = "/Users/coviam/obj_test/000077.jpg"
+img_path = "/Users/coviam/obj_test/000278.jpg"
 
 
 def get_output_layers(net):
