@@ -22,5 +22,5 @@ configs = {
 	'SOLR_HOST': 'x-search-solr-1.qa1-sg.cld:8983',
 	'SOLR_COLL': 'imageSearch',
 	'EMBEDDING_MODEL': '../models/embedding/1',
-	'TFX': False
+	'TFX': True
 }
