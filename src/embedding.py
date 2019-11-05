@@ -6,10 +6,11 @@ import numpy as np
 
 IMAGE_DIM = (380, 380, 3)
 
+
 def get_embedding(image_np):
 	if configs['TFX']:
 		payload = {
-			'instances': image_np.reshape((1, 380, 380, 3)).tolist()
+			'instances': np.array([image_np]).tolist()
 		}
 		data = requests.post(configs['EMBEDDING_TFX_HOST'] + '/v1/models/embedding:predict', json=payload)
 		return np.array(data.json()['predictions'][0])
