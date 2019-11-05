@@ -105,8 +105,12 @@ def save_model(model, labels):
 		json.dump(labels, f)
 
 
-with open('../models/cat_label_gpu.json', 'r') as f:
-	cat_label_map = json.load(f)
+try:
+	with open('../models/cat_label_gpu.json', 'r') as f:
+		cat_label_map = json.load(f)
+except:
+	print "ERROR Failed loading category labels"
+	pass
 
 
 def get_intent_categories(image):
