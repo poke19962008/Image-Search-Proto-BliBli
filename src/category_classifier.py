@@ -3,12 +3,12 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 import tensorflow as tf
 import numpy as np
 import cv2 as cv
-import json, random, shutil
+import json, random, shutil, requests
 from configs import configs
 from embedding import partition
 
+global_configs = configs
 configs = configs['CAT_CLASS']
-
 IMAGE_DIM = (None, None, 3)
 
 
@@ -117,11 +117,20 @@ except:
 
 
 def get_intent_categories(image):
-	tf.compat.v1.InteractiveSession()
-	category_classifier = tf.keras.models.load_model('../models/catgegory_class_gpu.h5')
 	scores, links = [], []
 	global cat_label_map
-	for index, score in enumerate(category_classifier.predict(np.array([image]))[0]):
+	if global_configs['TFX']:
+		payload = {
+			'instances': np.array([image]).tolist()
+		}
+		data = requests.post(global_configs['CAT_CLASSIFIER_TFX_HOST'] + '/v1/models/category:predict', json=payload)
+		predicted = np.array(data.json()['predictions'][0])
+	else:
+		tf.compat.v1.InteractiveSession()
+		category_classifier = tf.keras.models.load_model('../models/catgegory_class_gpu.h5')
+		predicted = category_classifier.predict(np.array([image]))[0]
+
+	for index, score in enumerate(predicted):
 		scores.append([score * 100, index])
 	top_cats = sorted(scores, key=lambda x: x[0], reverse=True)[:configs['TOP_CATEGORIES_DETECTED']]
 	return [[cat_label_map[index[1]], index[0]] for index in top_cats if index[0] > configs['CATEGORY_THRESH']]

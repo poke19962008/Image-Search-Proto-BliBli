@@ -23,8 +23,8 @@ input_height = 416
 
 scale = 0.00392
 class_names = ROOT + "obj.names"
-model_conf = ROOT + "yolov3.cfg"
-model_weights = ROOT + "backup/yolov3_last.weights"
+model_conf = ROOT + "yolo-small.cfg"
+model_weights = ROOT + "yolo-small.weights"
 classes = None
 
 image = cv.imread(img_path)

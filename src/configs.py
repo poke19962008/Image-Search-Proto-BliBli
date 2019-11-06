@@ -18,7 +18,7 @@ configs = {
 		'model_path': '../models/category/1'
 	},
 	'EMBEDDING_TFX_HOST': 'http://image-search-ml.qa1-sg.cld:8983',
-	'CAT_CLASSIFIER_TFX_HOST': 'http://image-search-ml.qa1-sg.cld:8983',
+	'CAT_CLASSIFIER_TFX_HOST': 'http://image-search-ml.qa1-sg.cld:2181',
 	'SOLR_HOST': 'x-search-solr-1.qa1-sg.cld:8983',
 	'SOLR_COLL': 'imageSearch',
 	'EMBEDDING_MODEL': '../models/embedding/1',

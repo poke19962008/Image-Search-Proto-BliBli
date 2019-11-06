@@ -3,7 +3,7 @@ from category_classifier import get_intent_categories
 from configs import configs
 from matplotlib import pyplot as plt
 import cv2 as cv
-import requests
+import requests, timeit
 
 HOST = configs['SOLR_HOST']
 COLL = configs['SOLR_COLL']
@@ -11,7 +11,10 @@ url = 'http://' + HOST + '/solr/' + COLL
 
 
 def search_by_url(path):
+	start = timeit.default_timer()
 	image_np = read_image(path)
+	stop = timeit.default_timer()
+	print "Time to load image=", stop-start
 	print "Image Dimension =", image_np.shape
 	flip_horizontal = cv.flip(image_np, 1)
 	aug_images = [image_np, flip_horizontal]
@@ -19,11 +22,20 @@ def search_by_url(path):
 	results = []
 	total_cats = []
 	for images in aug_images:
+		start = timeit.default_timer()
 		vec = get_embedding(images)
+		stop = timeit.default_timer()
+		print "Time to load vectors=", stop - start
+		start = timeit.default_timer()
 		cats = get_intent_categories(images)
+		stop = timeit.default_timer()
+		print "Time to load categories=", stop - start
 		total_cats += cats
 		cat_codes = [cat[0] for cat in cats]
+		start = timeit.default_timer()
 		results += query_to_solr(vec, cat_codes)
+		stop = timeit.default_timer()
+		print "Time to query solr=", stop - start
 
 	print "Categories =", total_cats
 	results = remove_dups(results)
@@ -52,6 +64,7 @@ def remove_dups(results):
 
 
 def query_to_solr(vec, categories):
+	print "Querying solr for categories =", categories
 	categories = " OR ".join(set(categories))
 	vector = ",".join(str(x) for x in vec)
 	params = \
@@ -65,4 +78,7 @@ def query_to_solr(vec, categories):
 
 
 if __name__ == '__main__':
-	search_by_url('/Users/coviam/obj_test/000148.jpg')
+	start = timeit.default_timer()
+	search_by_url('/Users/coviam/image_search/test/cat.jpg')
+	stop = timeit.default_timer()
+	print "Time to load entire result =", stop - start
